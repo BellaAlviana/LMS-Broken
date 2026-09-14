@@ -26,5 +26,7 @@ return new class extends Migration
 
     public function down(): void
     {
+        //Masalah 5: Pada migration create_materials_table.php, method down() kosong sehingga tabel materials tidak memiliki perintah untuk dihapus ketika migration di-rollback. Solusinya adalah menambahkan kode Schema::dropIfExists('materials'); pada method down() untuk menghapus tabel materials saat migration di-rollback. Migration dapat di-rollback dengan benar dan tabel materials akan ikut dihapus.
+        Schema::dropIfExists('materials');
     }
 };

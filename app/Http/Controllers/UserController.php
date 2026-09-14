@@ -17,12 +17,19 @@ class UserController extends Controller
     {
         return view('users.create');
     }
-
+//Masalah 6: UserController menggunakan $request->all() pada proses store() dan update(). Cara ini mengambil seluruh data yang dikirim dari form, sehingga data yang tidak diperlukan dapat ikut diproses. Mengganti $request->all() dengan validasi menggunakan $request->validate() agar hanya field yang dibutuhkan dan sesuai format yang diterima. Perbaikan ini membuat input pengguna lebih terkontrol dan mengurangi risiko data yang tidak seharusnya diubah, seperti role atau nim_nip, ikut tersimpan atau diperbarui.
     public function store(Request $request)
     {
-        User::create($request->all());
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8',
+        ]);
+ 
+         User::create($data);
 
-        return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan');
+        return redirect()->route('users.index')
+            ->with('success', 'User berhasil ditambahkan');
     }
 
     public function show(User $user)
@@ -37,9 +44,16 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        $user->update($request->all());
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8',
+        ]);
 
-        return redirect()->route('users.index')->with('success', 'User berhasil diperbarui');
+        $user->update($data);
+
+        return redirect()->route('users.index')
+            ->with('success', 'User berhasil diperbarui');
     }
 
     public function destroy(User $user)

@@ -9,8 +9,12 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
-
-    protected $guarded = [];
+//Masalah 4: Pada model User, terdapat:protected $guarded = []; Hal ini memungkinkan semua atribut dapat diisi massal, yang berpotensi menimbulkan risiko keamanan. Solusinya adalah mengganti protected $guarded = []; dengan protected $fillable = ['name', 'email', 'password']; untuk membatasi atribut yang dapat diisi massal hanya pada name, email, dan password.
+    protected $fillable = [
+    'name',
+    'email',
+    'password',
+];
 
     protected function casts(): array
     {

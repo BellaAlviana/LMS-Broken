@@ -14,6 +14,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamp('enrolled_at')->useCurrent();
             $table->timestamps();
+            //Masalah 2 (1): Tabel course_user belum memiliki unique composite pada course_id dan user_id, sehingga mahasiswa yang sama dapat terdaftar dua kali pada mata kuliah yang sama. Solusinya dengan menambahkan $table->unique(['course_id', 'user_id']); untuk Mencegah data enrollment mahasiswa terduplikasi pada mata kuliah yang sama.
+            $table->unique(['course_id', 'user_id']);
         });
     }
 

@@ -16,6 +16,8 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->timestamp('submitted_at');
             $table->timestamps();
+            //Masalah 2 (2): Tabel submissions belum memiliki unique composite pada assignment_id dan user_id. Akibatnya, satu mahasiswa dapat memiliki lebih dari satu data pengumpulan untuk tugas yang sama. Solusinya dengan menambahkan kode $table->unique(['assignment_id', 'user_id']); untuk mencegah mahasiswa memiliki data submission yang terduplikasi untuk tugas yang sama.
+            $table->unique(['assignment_id', 'user_id']);
         });
     }
 
