@@ -11,7 +11,8 @@ return new class extends Migration
         Schema::create('materials', function (Blueprint $table) {
             $table->id();
             $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete();
-            $table->foreignId('uploaded_by')->constrained('users')->restrictOnDelete();
+            //Masalah 3: Mengubah onDelete pada uploaded_by dari restrictOnDelete() menjadi cascadeOnDelete() karena material dianggap sebagai data turunan dari user yang mengunggahnya. Ketika user tersebut dihapus, data material yang diunggah olehnya juga akan dihapus secara otomatis sehingga tidak menyisakan data material yang masih mereferensikan user yang sudah dihapus.
+            $table->foreignId('uploaded_by')->constrained('users')->cascadeOnDelete();
             $table->string('title');
             $table->text('description')->nullable();
             $table->enum('type', ['file', 'link']);
